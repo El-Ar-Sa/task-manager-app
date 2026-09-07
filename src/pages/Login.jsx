@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { API_URL } from '../config/api';  // ✅ ADDED!
 
 function Login({ setIsLoggedIn }) {
   const [formData, setFormData] = useState({
@@ -45,7 +46,7 @@ function Login({ setIsLoggedIn }) {
     setIsLoading(true);
     
     try {
-const response = await fetch(`${API_URL}/login`, {
+      const response = await fetch(`${API_URL}/login`, {  // ✅ Now works!
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
