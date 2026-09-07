@@ -7,17 +7,29 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const SECRET_KEY = 'your-secret-key-here-change-this-in-production';
 
-// Middleware
+// ============ MIDDLEWARE ============
 app.use(cors());
 app.use(express.json());
 
-// In-memory database
+// ============ TEST ROUTE ============
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'Task Manager API is running!',
+    endpoints: {
+      register: 'POST /api/register',
+      login: 'POST /api/login',
+      tasks: 'GET /api/tasks'
+    }
+  });
+});
+
+// ============ IN-MEMORY DATABASE ============
 const users = [];
 const tasks = [];
 let userId = 1;
 let taskId = 1;
 
-// Verify JWT token
+// ============ VERIFY TOKEN ============
 const verifyToken = (req, res, next) => {
   const token = req.headers.authorization?.split(' ')[1];
   
@@ -38,6 +50,8 @@ const verifyToken = (req, res, next) => {
 
 // Register
 app.post('/api/register', async (req, res) => {
+  console.log('📝 Register request received:', req.body);
+  
   const { fullName, email, password } = req.body;
 
   if (!fullName || !email || !password) {
@@ -69,6 +83,8 @@ app.post('/api/register', async (req, res) => {
 
 // Login
 app.post('/api/login', async (req, res) => {
+  console.log('🔐 Login request received:', req.body);
+  
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -155,8 +171,9 @@ app.delete('/api/tasks/:id', verifyToken, (req, res) => {
   res.json({ message: 'Task deleted successfully' });
 });
 
-// Start server
+// ============ START SERVER ============
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
   console.log(`📝 Database ready with ${users.length} users`);
+  console.log(`🔗 Routes: /api/register, /api/login, /api/tasks`);
 });
