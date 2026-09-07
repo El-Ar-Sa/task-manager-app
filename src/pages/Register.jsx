@@ -66,8 +66,7 @@ function Register() {
     setIsLoading(true);
     
     try {
-      const response = await fetch(`${API_URL}/register`, {
-        method: 'POST',
+const response = await fetch(`${API_URL}/register`, {        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           fullName: formData.fullName,
