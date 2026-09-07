@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Stats from "../components/Stats";
 import { useTheme } from "../context/ThemeContext";
+import { API_URL } from '../config/api';  // ✅ ADDED!
 
 function Dashboard({ setIsLoggedIn }) {
   const [tasks, setTasks] = useState([]);
@@ -30,10 +31,11 @@ function Dashboard({ setIsLoggedIn }) {
     fetchTasks();
   }, [navigate]);
 
+  // ✅ FIXED: Removed extra fetch()
   const fetchTasks = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(fetch(`${API_URL}/tasks`), {
+      const response = await fetch(`${API_URL}/tasks`, {
         headers: {
           "Authorization": `Bearer ${token}`,
         },
@@ -57,13 +59,14 @@ function Dashboard({ setIsLoggedIn }) {
     }
   };
 
+  // ✅ FIXED: Using API_URL
   const addTask = async (e) => {
     e.preventDefault();
     if (!newTask.trim()) return;
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/tasks", {
+      const response = await fetch(`${API_URL}/tasks`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -90,10 +93,11 @@ function Dashboard({ setIsLoggedIn }) {
     }
   };
 
+  // ✅ FIXED: Using API_URL
   const deleteTask = async (id) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:5000/api/tasks/${id}`, {
+      const response = await fetch(`${API_URL}/tasks/${id}`, {
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -111,10 +115,11 @@ function Dashboard({ setIsLoggedIn }) {
     }
   };
 
+  // ✅ FIXED: Using API_URL
   const toggleTask = async (id, completed) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:5000/api/tasks/${id}`, {
+      const response = await fetch(`${API_URL}/tasks/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -144,12 +149,13 @@ function Dashboard({ setIsLoggedIn }) {
     setEditDueDate(task.dueDate || "");
   };
 
+  // ✅ FIXED: Using API_URL
   const saveEdit = async (id) => {
     if (!editText.trim()) return;
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:5000/api/tasks/${id}`, {
+      const response = await fetch(`${API_URL}/tasks/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
